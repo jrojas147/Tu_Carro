@@ -35,8 +35,8 @@ export class FormularioViabilizacionComponent implements OnInit {
   segundo: FormGroup;
   idResultado: number;
   pago: number;
-  isNoValidMonto: boolean;
-  maxLengthHolderCuotaInicial: number;
+  isNoValidMonto: boolean;//Nuevo
+  maxLengthHolderCuotaInicial: number;//Nuevo
 
   infoVehiculo: any;
   const = constantes;
@@ -87,8 +87,8 @@ export class FormularioViabilizacionComponent implements OnInit {
                public centralesRiesgo: CentralesRiesgoService,
                public breakpointObserver: BreakpointObserver,
                public scanParams: ScanparamsService ) {
-    // this.crearFormularios();
-    
+   // this.crearFormularios();
+
     setTimeout(() => {
       if (this.apiMercadolibre.idVehiculo !== undefined || this.apiMercadolibre.idVehiculo !== null) {
       this.obtenerInfoVehiculo();
@@ -115,7 +115,7 @@ export class FormularioViabilizacionComponent implements OnInit {
       cuotas: [48, Validators.required]
     });
 
-    this.primero.controls['cuotaInicial'].valueChanges.subscribe(value => {
+      this.primero.controls['cuotaInicial'].valueChanges.subscribe(value => {
       this.contacto.DatosBasicos.CuotaInicial = value;
       this.valorFinanciar = this.infoVehiculo.price;
       this.porcentaje = this.calculadoraServicio.calcularPorcentajeCuotaInicial(value, this.cuotaInicial);
@@ -144,12 +144,19 @@ export class FormularioViabilizacionComponent implements OnInit {
     this.segundo.controls['AutorizaConsultaCentrales'].valueChanges.subscribe(value => this.contacto.OtrosDatos.AutorizaConsultaCentrales = value);
   }
 
-  cuotaInicialChange(value) {
+  cuotaInicialChange(value) {//Joan
     this.isNoValidMonto = false;
+    debugger;
     if (value > this.valorFinanciar) {
       this.isNoValidMonto = true;
     }
   }
+
+
+
+
+
+
 
   get nombreNovalido() {
     return this.segundo.get('Nombre').invalid && this.segundo.get('Nombre').touched;
@@ -164,7 +171,7 @@ export class FormularioViabilizacionComponent implements OnInit {
   get documentoExtranjeria() {
     return this.segundo.controls['TipoDocumento'].value == 1 && this.segundo.controls['NumeroDocumento'].value.length == 6 && this.segundo.get('NumeroDocumento').touched;
   }
-  
+
   get celularNoValido() {
     return this.segundo.get('Celular').invalid && this.segundo.get('Celular').touched;
   }
@@ -183,8 +190,9 @@ export class FormularioViabilizacionComponent implements OnInit {
       .subscribe((infoVehiculo) => {
         this.infoVehiculo = infoVehiculo;
         this.valorFinanciar = this.infoVehiculo.price;
-        this.crearFormularios();
         this.cuotaInicial = this.calculadoraServicio.cuotaInicial(this.infoVehiculo.price);
+        this.crearFormularios();//Joan
+        debugger;
         this.primero.controls.cuotaInicial.setValue(this.cuotaInicial);
         this.valorFinanciar -= this.cuotaInicial;
         this.contacto.OtrosDatos.ValorFinanciar = this.valorFinanciar;
@@ -237,7 +245,7 @@ export class FormularioViabilizacionComponent implements OnInit {
     this.contacto.DatosBasicos.Plazo = Number(this.centralesRiesgo.plazo);
     this.contacto.OtrosDatos.InfoTres = this.centralesRiesgo.urlVehiculo;
     /*  */
-    
+
     if (value === 1) {
     this.editable = false;
     if (this.contacto.DatosFinancieros.ActividadEconomica) {
@@ -274,7 +282,7 @@ export class FormularioViabilizacionComponent implements OnInit {
             r = r.replace(new RegExp("ç", 'g'),"c");
             r = r.replace(new RegExp("[èéêë]", 'g'),"e");
             r = r.replace(new RegExp("[ìíîï]", 'g'),"i");
-            r = r.replace(new RegExp("ñ", 'g'),"n");                            
+            r = r.replace(new RegExp("ñ", 'g'),"n");
             r = r.replace(new RegExp("[òóôõö]", 'g'),"o");
             r = r.replace(new RegExp("œ", 'g'),"oe");
             r = r.replace(new RegExp("[ùúûü]", 'g'),"u");
@@ -306,7 +314,7 @@ export class FormularioViabilizacionComponent implements OnInit {
                   this.centralesRiesgo.variantePreaprobado = 25;
                   if(this.scanParams.enriquecido){
                     this.centralesRiesgo.sendMail = true;
-                  } 
+                  }
               }
               if(r == 'preaprobadonosevalidocorreoelectroniconicelularporubica'){
                   this.centralesRiesgo.variantePreaprobado = 26;
