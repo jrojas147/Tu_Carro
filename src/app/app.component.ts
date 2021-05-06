@@ -24,7 +24,7 @@ import { ScanparamsService } from './services/scanparams.service';
 export class AppComponent implements OnInit {
   idVehiculo: string;
   urlVehiculo = document.referrer;
-  // urlVehiculo: string = "https://articulo.tucarro.com.co/MCO-558397266-brilliance-2020-v3-_JM#promoted-items-new=0";
+  /* urlVehiculo: string = "https://articulo.tucarro.com.co/MCO-558397266-brilliance-2020-v3-_JM#promoted-items-new=0"; */
   activarVistaError = false;
   contador: number = 0;
   splash: boolean;

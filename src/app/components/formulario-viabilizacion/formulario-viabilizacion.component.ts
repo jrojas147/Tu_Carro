@@ -28,12 +28,15 @@ import { ScanparamsService } from 'src/app/services/scanparams.service';
 })
 
 export class FormularioViabilizacionComponent implements OnInit {
+
   isLinear = false;
   editable = true;
   primero: FormGroup;
   segundo: FormGroup;
   idResultado: number;
   pago: number;
+  isNoValidMonto: boolean;
+  maxLengthHolderCuotaInicial: number;
 
   infoVehiculo: any;
   const = constantes;
@@ -77,17 +80,19 @@ export class FormularioViabilizacionComponent implements OnInit {
     }
   };
 
+
   constructor( public formBuilder: FormBuilder,
                public apiMercadolibre: ApiMercadolibreService,
                public calculadoraServicio: ApiCalculadoraService,
                public centralesRiesgo: CentralesRiesgoService,
                public breakpointObserver: BreakpointObserver,
                public scanParams: ScanparamsService ) {
-    this.crearFormularios();
-    this.segundo.controls['TipoDocumento'].setValue(1);
+    // this.crearFormularios();
+    
     setTimeout(() => {
       if (this.apiMercadolibre.idVehiculo !== undefined || this.apiMercadolibre.idVehiculo !== null) {
       this.obtenerInfoVehiculo();
+      this.segundo.controls['TipoDocumento'].setValue(1);
       }
     }, 200);
     breakpointObserver.observe([
@@ -97,6 +102,7 @@ export class FormularioViabilizacionComponent implements OnInit {
             this.desaparecerDetallesMobile = true;
           }
         });
+
    }
 
   ngOnInit() {
@@ -105,29 +111,17 @@ export class FormularioViabilizacionComponent implements OnInit {
 
   crearFormularios() {
     this.primero = this.formBuilder.group({
-      cuotaInicial: [0, [Validators.required, Validators.minLength(6)]],
+      cuotaInicial: [0, [Validators.required, Validators.minLength(6), Validators.max(this.valorFinanciar)]],
       cuotas: [48, Validators.required]
     });
 
-      this.primero.controls['cuotaInicial'].valueChanges.subscribe(value => {
+    this.primero.controls['cuotaInicial'].valueChanges.subscribe(value => {
       this.contacto.DatosBasicos.CuotaInicial = value;
       this.valorFinanciar = this.infoVehiculo.price;
-      debugger;
       this.porcentaje = this.calculadoraServicio.calcularPorcentajeCuotaInicial(value, this.cuotaInicial);
       this.resultadoCalculadora = this.calculadoraServicio.calcularCuota(this.const.cuotas, this.valorFinanciar - value, this.porcentaje);
       this.contacto.OtrosDatos.ValorFinanciar = this.valorFinanciar - value;
-
-      let Prueba =this.valorFinanciar;
-      console.log(Prueba);
-      debugger;
-
     });
-
-    //let temporal = this.infoVehiculo.price;
-    let Tempo = 34;
-    debugger;
-
-
 
     this.segundo = this.formBuilder.group({
       Nombre: ['', [Validators.required, Validators.minLength(5)]],
@@ -150,17 +144,12 @@ export class FormularioViabilizacionComponent implements OnInit {
     this.segundo.controls['AutorizaConsultaCentrales'].valueChanges.subscribe(value => this.contacto.OtrosDatos.AutorizaConsultaCentrales = value);
   }
 
-  get inicialNovalido(){
-    const test = this.primero.getRawValue();
-    //.if(test.valorFinanciar < this.obtenerInfoVehiculo.cuotaInicial)
-
-
-    return
-    this.valorFinanciar;
-
-
+  cuotaInicialChange(value) {
+    this.isNoValidMonto = false;
+    if (value > this.valorFinanciar) {
+      this.isNoValidMonto = true;
+    }
   }
-
 
   get nombreNovalido() {
     return this.segundo.get('Nombre').invalid && this.segundo.get('Nombre').touched;
@@ -175,7 +164,7 @@ export class FormularioViabilizacionComponent implements OnInit {
   get documentoExtranjeria() {
     return this.segundo.controls['TipoDocumento'].value == 1 && this.segundo.controls['NumeroDocumento'].value.length == 6 && this.segundo.get('NumeroDocumento').touched;
   }
-
+  
   get celularNoValido() {
     return this.segundo.get('Celular').invalid && this.segundo.get('Celular').touched;
   }
@@ -194,10 +183,12 @@ export class FormularioViabilizacionComponent implements OnInit {
       .subscribe((infoVehiculo) => {
         this.infoVehiculo = infoVehiculo;
         this.valorFinanciar = this.infoVehiculo.price;
+        this.crearFormularios();
         this.cuotaInicial = this.calculadoraServicio.cuotaInicial(this.infoVehiculo.price);
         this.primero.controls.cuotaInicial.setValue(this.cuotaInicial);
         this.valorFinanciar -= this.cuotaInicial;
         this.contacto.OtrosDatos.ValorFinanciar = this.valorFinanciar;
+        this.maxLengthHolderCuotaInicial = this.valorFinanciar.toString().length + 4;
       });
 
   }
@@ -246,7 +237,7 @@ export class FormularioViabilizacionComponent implements OnInit {
     this.contacto.DatosBasicos.Plazo = Number(this.centralesRiesgo.plazo);
     this.contacto.OtrosDatos.InfoTres = this.centralesRiesgo.urlVehiculo;
     /*  */
-
+    
     if (value === 1) {
     this.editable = false;
     if (this.contacto.DatosFinancieros.ActividadEconomica) {
@@ -283,7 +274,7 @@ export class FormularioViabilizacionComponent implements OnInit {
             r = r.replace(new RegExp("ç", 'g'),"c");
             r = r.replace(new RegExp("[èéêë]", 'g'),"e");
             r = r.replace(new RegExp("[ìíîï]", 'g'),"i");
-            r = r.replace(new RegExp("ñ", 'g'),"n");
+            r = r.replace(new RegExp("ñ", 'g'),"n");                            
             r = r.replace(new RegExp("[òóôõö]", 'g'),"o");
             r = r.replace(new RegExp("œ", 'g'),"oe");
             r = r.replace(new RegExp("[ùúûü]", 'g'),"u");
@@ -315,7 +306,7 @@ export class FormularioViabilizacionComponent implements OnInit {
                   this.centralesRiesgo.variantePreaprobado = 25;
                   if(this.scanParams.enriquecido){
                     this.centralesRiesgo.sendMail = true;
-                  }
+                  } 
               }
               if(r == 'preaprobadonosevalidocorreoelectroniconicelularporubica'){
                   this.centralesRiesgo.variantePreaprobado = 26;
