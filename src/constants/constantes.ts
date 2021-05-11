@@ -3,6 +3,23 @@ export const constantes = {
     REGEX_ID: '/MCO-(.*?)(-|$)/',
     idInformacion: ['Marca', 'Modelo', 'Versión', 'Año', 'Cilindrada', 'Kilómetros'],
     cuotas: [48, 60, 72, 84],
+    cuotas72: [48, 60, 72],
+    cuotas60: [48, 60],
+    validatorModels: [
+      {value: 2010, cuotaInicial: 20, plazo: 2},
+      {value: 2011, cuotaInicial: 20, plazo: 3},
+      {value: 2012, cuotaInicial: 20, plazo: 3},
+      {value: 2013, cuotaInicial: 0, plazo: 3},
+      {value: 2014, cuotaInicial: 0, plazo: 3},
+      {value: 2015, cuotaInicial: 0, plazo: 3},
+      {value: 2016, cuotaInicial: 20, plazo: 4},
+      {value: 2017, cuotaInicial: 20, plazo: 4},
+      {value: 2018, cuotaInicial: 0, plazo: 4},
+      {value: 2019, cuotaInicial: 0, plazo: 4},
+      {value: 2020, cuotaInicial: 0, plazo: 4},
+      {value: 2021, cuotaInicial: 0, plazo: 4},
+      {value: 2022, cuotaInicial: 0, plazo: 4}
+    ],
     nombreCuotas: ['cuatroOcho', 'seisCero', 'sieteDos', 'ochoCuatro'],
     tasa: 0.0115,
     tipoDocumento: [

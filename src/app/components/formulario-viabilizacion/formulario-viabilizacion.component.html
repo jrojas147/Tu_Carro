@@ -29,6 +29,7 @@
           formControlName="cuotaInicial"
           required
           >
+          <mat-error *ngIf="isNoValidMonto">Necesitamos saber tu nombre, diligencia tu nombre completo</mat-error><!--Joan-->
         </mat-form-field>
 
         <div class="contCampoDos">
@@ -45,7 +46,10 @@
 
         <div class="contCampoUno">
             <p id="cuotas" class="tituloCampo cuotas">Selecciona el número de cuotas</p>
-            <app-speedometer></app-speedometer>
+            <app-speedometer
+              *ngIf="isSpeed"
+              [modelCarro]="modeloVehiculo"
+            ></app-speedometer>
         </div>
 
         <div class="contBoton center">

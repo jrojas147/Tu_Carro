@@ -17,8 +17,17 @@ export class ApiCalculadoraService {
     this.observablResultadoCalculadora = new BehaviorSubject<any>(this.resultadoCalculadora);
    }
 
-  cuotaInicial(valor: number) {
-    return valor * 0.1;
+  cuotaInicial(valor: number, modelo: number) {
+    //return valor * 0.10;
+    let Valor_Cuota_Inicial;
+    Valor_Cuota_Inicial = valor * 0.2;
+    constantes.validatorModels.forEach(element => {
+      if (element.value === modelo && element.cuotaInicial === 0) {
+        Valor_Cuota_Inicial =  0;
+      }
+    });
+
+    return Valor_Cuota_Inicial;
   }
 
   calcularCuota(cuotas: any, valor: number, porcentaje: number) {
@@ -63,7 +72,11 @@ export class ApiCalculadoraService {
     this.resultadoCalculadora = {resultadoCuota: []};
   }
 
+
+
   calcularPorcentajeCuotaInicial(value: number, cuotaInicial: number) {
-    return (value * 10) / cuotaInicial;
-  }
+    //return cuotaInicial / valor;
+    return (value * 20) / cuotaInicial;
+    debugger;
+}
 }
