@@ -104,18 +104,15 @@ export class FormularioViabilizacionComponent implements OnInit {
         this.desaparecerDetallesMobile = true;
       }
     });
-
   }
 
   ngOnInit() {
     this.viabilizar();
-    const ValorMinimo = 2000000;//llamar el metodo que trae el minimo de api calucladora por que nunca se leee
   }
 
   crearFormularios() {
     this.primero = this.formBuilder.group({
       cuotaInicial: [0, [Validators.required, Validators.minLength(6), Validators.min(this.cuotaInicial), Validators.max(this.valorFinanciar)]],
-      //cuotaInicial: [0, [Validators.required, Validators.minLength(6), Validators.max(this.valorFinanciar), Validators.min(this.valorMinimo)   ] ], //Nuevo
 
       cuotas: [48, Validators.required]
     });
@@ -124,6 +121,7 @@ export class FormularioViabilizacionComponent implements OnInit {
       this.contacto.DatosBasicos.CuotaInicial = value;
       this.valorFinanciar = this.infoVehiculo.price;
       this.porcentaje = this.calculadoraServicio.calcularPorcentajeCuotaInicial(value, this.cuotaInicial);
+      debugger;
       this.resultadoCalculadora = this.calculadoraServicio.calcularCuota(this.const.cuotas, this.valorFinanciar - value, this.porcentaje);
       this.contacto.OtrosDatos.ValorFinanciar = this.valorFinanciar - value;
     });
@@ -149,7 +147,7 @@ export class FormularioViabilizacionComponent implements OnInit {
     this.segundo.controls['AutorizaConsultaCentrales'].valueChanges.subscribe(value => this.contacto.OtrosDatos.AutorizaConsultaCentrales = value);
   }
 
-  cuotaInicialChange(value) {//Joan
+  cuotaInicialChange(value) {
     this.isNoValidMonto = false;
     this.isNoValidCuotaInicial = false;
     if (value > this.valorFinanciar) {
@@ -203,14 +201,7 @@ export class FormularioViabilizacionComponent implements OnInit {
 
   obtenerModelo() {
     const objeto = this.infoVehiculo.attributes.find((item: any) => item.name === 'Año');
-
     return objeto;
-//    this.obtenerModeloN.emit(this.obtenerModelo);
-  }
-
-  valorMinimoCi(){
-    const pba = this.infoVehiculo.price;
-    debugger;
   }
 
   clickRadioCuota() {

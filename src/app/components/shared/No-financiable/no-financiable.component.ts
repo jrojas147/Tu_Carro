@@ -12,11 +12,12 @@ import { ApiMercadolibreService } from 'src/app/services/api-mercadolibre.servic
 export class NoFinanciableComponent implements OnInit {
   const = constantes;
 
-
-  constructor() { }
+  constructor(
+    public apiMercadolibre: ApiMercadolibreService)
+    {
+  }
 
   ngOnInit() {
-
   }
 
 }
