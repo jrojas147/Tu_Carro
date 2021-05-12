@@ -6,7 +6,8 @@
         <!-- errorApi -->
         <app-viabiliza-vehiculo *ngIf="!apiMercadolibre.errorApi || !splash || centralesRiesgo.respuestaId !== -1" [@animationFadeOut]="!apiMercadolibre.errorApi || !splash || centralesRiesgo.respuestaId !== -1"></app-viabiliza-vehiculo>
         <app-mensaje-error *ngIf="apiMercadolibre.idVehiculo == undefined || apiMercadolibre.errorApi" [@animationFadeOut]="apiMercadolibre.errorApi"></app-mensaje-error>
-    </div>
+        <!-- <app-no-financiable *ngIf="modelCarro<2010"></app-no-financiable> -->
+      </div>
 
     <div class="msjEnriquecido" *ngIf="scanParams.enriquecido">
         <div></div>

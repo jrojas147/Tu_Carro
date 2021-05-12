@@ -27,7 +27,7 @@ export class SpeedometerComponent implements OnInit {
   periodo = new FormControl(48);
   checkPlazos: any;
   informacionPagar: any;
-  cssPlazo: string; 
+  cssPlazo: string;
 
   constructor(public calculadoraServicio: ApiCalculadoraService,
     public breakpointObserver: BreakpointObserver, public centralesRiesgo: CentralesRiesgoService) {
@@ -48,14 +48,13 @@ export class SpeedometerComponent implements OnInit {
   ngOnInit() {
     // this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[0];
     this.modelSelected = this.const.validatorModels.find(x=> x.value == this.modelCarro.value_name);
-    this.validadPlazos();
+    this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[0];
     this.periodo.valueChanges.subscribe(value => this.cambioVelocimetro(value));
     this.cambioResultadoCalculadora();
   }
 
   validadPlazos() {
     this.checkPlazos = [];
-    this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[0];
     for (let i = 0; i < this.modelSelected.plazo; i++) {
       this.checkPlazos.push(this.calculadoraServicio.resultadoCalculadora.resultadoCuota[i]);
     }
@@ -64,6 +63,7 @@ export class SpeedometerComponent implements OnInit {
   }
 
   cambioVelocimetro(value) {
+    this.validadPlazos();
     switch (value) {
       case 48:
         this.needleValue = 13;
@@ -93,78 +93,6 @@ export class SpeedometerComponent implements OnInit {
         break;
     }
 
-
-
-    // if (this.modelSelected.plazo === 2) {
-    //   switch (value) {
-    //     case 48:
-    //       this.needleValue = 13;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[0];
-    //       this.centralesRiesgo.plazo = 4;
-    //       break;
-
-    //     case 60:
-    //       this.needleValue = 37;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[1];
-    //       this.centralesRiesgo.plazo = 5;
-    //       break;
-
-    //     default:
-    //       break;
-    //   }
-    // } else if (this.modelSelected.plazo === 3) {
-    //   switch (value) {
-    //     case 48:
-    //       this.needleValue = 13;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[0];
-    //       this.centralesRiesgo.plazo = 4;
-    //       break;
-
-    //     case 60:
-    //       this.needleValue = 37;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[1];
-    //       this.centralesRiesgo.plazo = 5;
-    //       break;
-
-    //     case 72:
-    //       this.needleValue = 65;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[2];
-    //       this.centralesRiesgo.plazo = 6;
-    //       break;
-
-    //     default:
-    //       break;
-    //   }
-    // } else {
-    //   switch (value) {
-    //     case 48:
-    //       this.needleValue = 13;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[0];
-    //       this.centralesRiesgo.plazo = 4;
-    //       break;
-
-    //     case 60:
-    //       this.needleValue = 37;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[1];
-    //       this.centralesRiesgo.plazo = 5;
-    //       break;
-
-    //     case 72:
-    //       this.needleValue = 65;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[2];
-    //       this.centralesRiesgo.plazo = 6;
-    //       break;
-
-    //     case 84:
-    //       this.needleValue = 87;
-    //       this.informacionPagar = this.calculadoraServicio.resultadoCalculadora.resultadoCuota[3];
-    //       this.centralesRiesgo.plazo = 7;
-    //       break;
-
-    //     default:
-    //       break;
-    //   }
-    // }
   }
   cambioResultadoCalculadora() {
     this.calculadoraServicio.observablResultadoCalculadora.subscribe(() => {

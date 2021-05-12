@@ -27,9 +27,12 @@
           placeholder="Cuota inicial"
           [options]="{ align: 'left', prefix: '$ ', suffix: '', thousands: '.', decimal: ',', precision: 0 }"
           formControlName="cuotaInicial"
+          [maxlength]="maxLengthHolderCuotaInicial"
+          (ngModelChange)="cuotaInicialChange(primero.get('cuotaInicial').value)"
           required
           >
-          <mat-error *ngIf="isNoValidMonto">Necesitamos saber tu nombre, diligencia tu nombre completo</mat-error><!--Joan-->
+          <mat-error *ngIf="isNoValidMonto">El valor ingresado supera el valor del vehiculo</mat-error><!--Joan-->
+          <mat-error *ngIf="isNoValidCuotaInicial">No puede ser menor a  la cuota inicial</mat-error><!--Joan-->
         </mat-form-field>
 
         <div class="contCampoDos">

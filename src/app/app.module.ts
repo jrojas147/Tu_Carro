@@ -25,6 +25,7 @@ import { SpeedometerComponent } from './components/formulario-viabilizacion/spee
 import { GaugeChartModule } from 'angular-gauge-chart';
 import { UrlSeguraPipe } from './pipes/url-segura.pipe';
 import { RouterModule } from '@angular/router';
+import { NoFinanciableComponent } from './components/shared/No-financiable/no-financiable.component';
 
 registerLocaleData(localeEs, 'es');
 
@@ -43,7 +44,8 @@ registerLocaleData(localeEs, 'es');
     RespuestaComponent,
     MensajeErrorComponent,
     SpeedometerComponent,
-    UrlSeguraPipe
+    UrlSeguraPipe,
+    NoFinanciableComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,9 @@ registerLocaleData(localeEs, 'es');
     GaugeChartModule,
     RouterModule.forRoot([])
   ],
+  exports: [//Adiiconal
+    FormularioViabilizacionComponent//Adiiconal Se Exporto para utilizar en nodal
+  ],//Adiiconal
   providers: [{ provide: LOCALE_ID, useValue: 'es' }],
   bootstrap: [AppComponent]
 })

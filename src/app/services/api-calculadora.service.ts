@@ -17,13 +17,11 @@ export class ApiCalculadoraService {
     this.observablResultadoCalculadora = new BehaviorSubject<any>(this.resultadoCalculadora);
    }
 
-  cuotaInicial(valor: number, modelo: number) {
-    //return valor * 0.10;
+  cuotaInicial(valor: number, modelo: string) {
     let Valor_Cuota_Inicial;
-    Valor_Cuota_Inicial = valor * 0.2;
     constantes.validatorModels.forEach(element => {
-      if (element.value === modelo && element.cuotaInicial === 0) {
-        Valor_Cuota_Inicial =  0;
+      if (element.value === modelo) {
+        Valor_Cuota_Inicial =  valor * element.cuotaInicial;
       }
     });
 

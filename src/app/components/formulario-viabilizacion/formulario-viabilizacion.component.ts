@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { ViabilizaVehiculoComponent } from './../vistas/viabiliza-vehiculo/viabiliza-vehiculo.component';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiMercadolibreService } from 'src/app/services/api-mercadolibre.service';
 import { constantes } from 'src/constants/constantes';
@@ -35,6 +36,7 @@ export class FormularioViabilizacionComponent implements OnInit {
   idResultado: number;
   pago: number;
   isNoValidMonto: boolean;//Nuevo
+  isNoValidCuotaInicial: boolean;
   maxLengthHolderCuotaInicial: number;//Nuevo
   isSpeed: boolean;
 
@@ -107,11 +109,14 @@ export class FormularioViabilizacionComponent implements OnInit {
 
   ngOnInit() {
     this.viabilizar();
+    const ValorMinimo = 2000000;//llamar el metodo que trae el minimo de api calucladora por que nunca se leee
   }
 
   crearFormularios() {
     this.primero = this.formBuilder.group({
-      cuotaInicial: [0, [Validators.required, Validators.minLength(6), Validators.max(this.valorFinanciar)]],
+      cuotaInicial: [0, [Validators.required, Validators.minLength(6), Validators.min(this.cuotaInicial), Validators.max(this.valorFinanciar)]],
+      //cuotaInicial: [0, [Validators.required, Validators.minLength(6), Validators.max(this.valorFinanciar), Validators.min(this.valorMinimo)   ] ], //Nuevo
+
       cuotas: [48, Validators.required]
     });
 
@@ -146,8 +151,12 @@ export class FormularioViabilizacionComponent implements OnInit {
 
   cuotaInicialChange(value) {//Joan
     this.isNoValidMonto = false;
+    this.isNoValidCuotaInicial = false;
     if (value > this.valorFinanciar) {
       this.isNoValidMonto = true;
+    }
+    if (value < this.cuotaInicial) {
+      this.isNoValidCuotaInicial = true;
     }
   }
 
@@ -160,11 +169,9 @@ export class FormularioViabilizacionComponent implements OnInit {
   get idNoValido() {
     return this.segundo.get('NumeroDocumento').invalid && this.segundo.get('NumeroDocumento').touched;
   }
-
   get documentoExtranjeria() {
     return this.segundo.controls['TipoDocumento'].value == 1 && this.segundo.controls['NumeroDocumento'].value.length == 6 && this.segundo.get('NumeroDocumento').touched;
   }
-
   get celularNoValido() {
     return this.segundo.get('Celular').invalid && this.segundo.get('Celular').touched;
   }
@@ -198,6 +205,12 @@ export class FormularioViabilizacionComponent implements OnInit {
     const objeto = this.infoVehiculo.attributes.find((item: any) => item.name === 'Año');
 
     return objeto;
+//    this.obtenerModeloN.emit(this.obtenerModelo);
+  }
+
+  valorMinimoCi(){
+    const pba = this.infoVehiculo.price;
+    debugger;
   }
 
   clickRadioCuota() {

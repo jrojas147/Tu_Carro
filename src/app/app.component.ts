@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ApiMercadolibreService } from './services/api-mercadolibre.service';
 import { CentralesRiesgoService } from './services/centrales-riesgo.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -30,36 +30,36 @@ export class AppComponent implements OnInit {
   splash: boolean;
 
   constructor(public apiMercadolibre: ApiMercadolibreService,
-              public centralesRiesgo: CentralesRiesgoService,
-              public scanParams: ScanparamsService
-              ) {
+    public centralesRiesgo: CentralesRiesgoService,
+    public scanParams: ScanparamsService
+  ) {
   }
 
   public ngOnInit() {
-      this.centralesRiesgo.urlVehiculo = this.urlVehiculo;
-      this.scanParams.getParamIdVehiculo().subscribe((data: any) => {
-          this.contador = this.contador + 1;
-          if (data.idvehiculo && this.contador > 1) {
-            if (data.idvehiculo) {
-              this.idVehiculo = data.idvehiculo;
-              this.apiMercadolibre.usarIdVehiculo(this.idVehiculo);
-            } else {
-              this.apiMercadolibre.obtenerIdVehiculo(this.urlVehiculo);
-            }
-          }
-          setTimeout(() => {
-            this.centralesRiesgo.cargador = false;
-          }, 3000);
-      });
-      this.scanParams.getParams();
-      this.animasplash();
-      this.centralesRiesgo.cargador = true;
+    this.centralesRiesgo.urlVehiculo = this.urlVehiculo;
+    this.scanParams.getParamIdVehiculo().subscribe((data: any) => {
+      this.contador = this.contador + 1;
+      if (data.idvehiculo && this.contador > 1) {
+        if (data.idvehiculo) {
+          this.idVehiculo = data.idvehiculo;
+          this.apiMercadolibre.usarIdVehiculo(this.idVehiculo);
+        } else {
+          this.apiMercadolibre.obtenerIdVehiculo(this.urlVehiculo);
+        }
+      }
+      setTimeout(() => {
+        this.centralesRiesgo.cargador = false;
+      }, 3000);
+    });
+    this.scanParams.getParams();
+    this.animasplash();
+    this.centralesRiesgo.cargador = true;
   }
 
   animasplash() {
     this.splash = true;
     setTimeout(() => {
-    this.splash = false;
+      this.splash = false;
     }, 2000);
   }
 }
